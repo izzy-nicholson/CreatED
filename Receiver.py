@@ -18,31 +18,53 @@ radio.config(power=7)
 
 display.show("C")
 
-while True:
-    
-    R = 0    
-    L = 0
-    time_list=[]
-    LS_list=[]
-    RS_list =[]
-    
-    while (R<10):
+time_list=[]
+left_list=[]
+right_list =[]
+centre_list =[]
+
+for t in range(500):
         
-        acc_string = radio.receive()
+    acc_string = radio.receive()
        
-        if acc_string is not None:
-            
-            print("R = " + str(R))
-            print("L = " + str(L))
-            
-            tokens = acc_string.split(", ") 
-            Test = Measurement(tokens[0],tokens[1],tokens[2],tokens[3])
-            print(Test)
-            if(tokens[0]=="Left"):
-                L += 1
-            else if (tokens[0] == "Right"):
-                R += 1
-                 
+    if acc_string is not None:
+
+        tokens = acc_string.split(", ") 
+        Test = Measurement(tokens[0],tokens[1],tokens[2],tokens[3])
+        print(Test)
+        if(tokens[0]=="Left"):
+            if(len(left_list) - len(right_list) <1):
+                left_list.append(Test)
+                t += 1
+        elif (tokens[0] == "Right"):
+            if(len(right_list) - len(left_list) <1):
+                right_list.append(Test)
+
+while True:
+               
+    acc_string = radio.receive()
+           
+    if acc_string is not None:
+
+        tokens = acc_string.split(", ") 
+        Test = Measurement(tokens[0],tokens[1],tokens[2],tokens[3])
+        print(Test)
+        if(tokens[0]=="Left"):
+            if(len(left_list) - len(right_list) <1):
+                del(left_list[0])
+                left_list.append(Test)
+                t += 1
+                centre_list.append(Measurement(Centre, accelerometer.get_x(), accelerometer.get_y(), accelerometer.get_z())
+        elif (tokens[0] == "Right"):
+            if(len(right_list) - len(left_list) <1):
+                del(right_list[0])
+                right_list.append(Test)
+                
+    if(t%500==0):
+        print("The length of the left list is: " + str(len(left_list)))        
+        print("The length of the right list is: " + str(len(right_list)))
+
+
                 
             
         

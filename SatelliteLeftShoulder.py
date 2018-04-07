@@ -5,7 +5,7 @@ radio.on()
 radio.config(channel = 41)
 radio.config(power=7) 
 
-display.show("Hi")
+display.show("S")
 
 while True:
     
@@ -13,5 +13,5 @@ while True:
     acc_y = accelerometer.get_y()
     acc_z = accelerometer.get_z()
     
-    radio.send("LS, " + str(acc_x) + ", " + str(acc_y) + ", " + str(acc_z) + "\n")
+    radio.send("Left, " + str(acc_x) + ", " + str(acc_y) + ", " + str(acc_z) + "\n")
     sleep(1000)

@@ -8,11 +8,6 @@ s.baudrate = baud
 
 x_left_values = []
 x_right_values = []
-fig = plt.figure()
-ax1 = fig.add_subplot(1,1,1)
-
-
-
 while True:  
     data = s.readline()
     print(data)

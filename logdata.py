@@ -1,7 +1,7 @@
 import serial, time  
 import matplotlib.pyplot as plt
 import numpy as np
-port = "/dev/ttyACM1"  
+port = "/dev/ttyACM0"  
 baud = 115200  
 s = serial.Serial(port)  
 s.baudrate = baud
@@ -11,7 +11,7 @@ right_values = []
 
 start = time.time()
 print(start)
-while (time.time() - start < 20):  
+while (time.time() - start < 30):  
     data = s.readline()
     #print(data)
     tokens = data.decode('utf-8').split(", ")

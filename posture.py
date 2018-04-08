@@ -4,6 +4,11 @@ import time, random
 import math
 from collections import deque
 
+import matplotlib.pyplot as plt
+import numpy as np
+
+import serial
+
 start = time.time()
 
 class RealtimePlot:
@@ -30,19 +35,58 @@ class RealtimePlot:
             self.axes.relim(); self.axes.autoscale_view() # rescale the y-axis
             return self.lineplot
         animation.FuncAnimation(figure, wrapper, interval=interval)
+        
+
+def measure(s):
+    data = s.readline()
+    print(data)
+    tokens = data.decode('utf-8').split(", ")
+    if (len(tokens) == 4):
+        print(tokens)
+        (name,x,y,z) = tokens
+        if (name == 'Left'):
+            return float(y)
 
 def main():
-    from matplotlib import pyplot as plt
+
+    port = "/dev/ttyACM1"  
+    baud = 115200  
+    s = serial.Serial(port)  
+    s.baudrate = baud
+
+    x_left_values = []
+    x_right_values = []
+    '''while True:  
+        data = s.readline()
+        print(data)
+        tokens = data.decode('utf-8').split(", ")
+        if (len(tokens) == 4):
+            print(tokens)
+            (name,x,y,z) = tokens
+            if (name == 'Left'):
+                x_left_values.append(x)
+                x_l = np.array(x_left_values)
+                plt.plot(x_l)
+                plt.title('left')
+                plt.show()
+                plt.pause(0.0001)
+                
+            elif (nam    fig = plt.figure()e == 'Right'):
+                x_right_values.append(x)
+                x_r = np.array(x_right_values)
+                plt.plot(x_r)
+                plt.title('right')
+                plt.show()'''
     
     fig, axes = plt.subplots()
     display = RealtimePlot(axes)
-    display.animate(fig, lambda frame_index: (time.time() - start, random.random() * 100))
+    display.animate(fig, lambda frame_index: (time.time() - start, measure(s)))
     plt.show()
     
     fig, axes = plt.subplots()
     display = RealtimePlot(axes)
     while True:
-        display.add(time.time() - start, random.random() * 100)
+        display.add(time.time() - start, measure(s))
         plt.pause(0.001)
 
 if __name__ == "__main__": main()

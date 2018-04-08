@@ -5,8 +5,14 @@ port = "/dev/ttyACM1"
 baud = 115200  
 s = serial.Serial(port)  
 s.baudrate = baud
+
 x_left_values = []
 x_right_values = []
+fig = plt.figure()
+ax1 = fig.add_subplot(1,1,1)
+
+
+
 while True:  
     data = s.readline()
     print(data)
@@ -20,10 +26,12 @@ while True:
             plt.plot(x_l)
             plt.title('left')
             plt.show()
+            plt.pause(0.0001)
+            '''
         elif (name == 'Right'):
             x_right_values.append(x)
             x_r = np.array(x_right_values)
             plt.plot(x_r)
             plt.title('right')
-            plt.show()
+            plt.show()'''
     time.sleep(0.1)
